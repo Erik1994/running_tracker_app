@@ -8,6 +8,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.example.runningtracker.R
+import com.example.runningtracker.util.TrackingUtility
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -22,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         }
       //  NavigationUI.setupActionBarWithNavController(this, navController)
         setSupportActionBar(toolbar)
-       // bottomNavigationView.setupWithNavController(navController)
+        bottomNavigationView.setupWithNavController(navController)
 
         navController.addOnDestinationChangedListener{ _, destination, _ ->
             when(destination.id) {
@@ -30,7 +31,7 @@ class MainActivity : AppCompatActivity() {
                 else -> bottomNavigationView.visibility = View.GONE
             }
         }
-        NavigationUI.setupWithNavController(bottomNavigationView,  navController)
+        //NavigationUI.setupWithNavController(bottomNavigationView,  navController)
     }
 
     override fun onSupportNavigateUp(): Boolean {
