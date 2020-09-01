@@ -1,11 +1,14 @@
 package com.example.runningtracker.ui.tracking
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.runningtracker.R
+import com.example.runningtracker.services.TrackingService
 import com.example.runningtracker.ui.run.RunViewModel
+import com.example.runningtracker.util.Constants
 import com.google.android.gms.maps.GoogleMap
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_tracking.*
@@ -19,6 +22,21 @@ class TrackingFragment: Fragment(R.layout.fragment_tracking) {
         super.onViewCreated(view, savedInstanceState)
         mapView.onCreate(savedInstanceState)
         initMap()
+        setClickListeners()
+    }
+
+    private fun setClickListeners() {
+        btnToggleRun.setOnClickListener {
+            sendCommandsToService(Constants.ACTION_START_RESUME_LOCATION_TRACKING)
+        }
+    }
+
+    private fun sendCommandsToService(action:String) {
+
+        Intent(requireContext(), TrackingService::class.java).also {
+            it.action = action
+            requireContext().startService(it)
+        }
     }
 
     private fun initMap() {

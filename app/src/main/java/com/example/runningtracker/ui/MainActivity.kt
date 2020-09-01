@@ -1,5 +1,6 @@
 package com.example.runningtracker.ui
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -8,6 +9,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.example.runningtracker.R
+import com.example.runningtracker.util.Constants.ACTION_SHOW_TRACKING_FRAGMENT
 import com.example.runningtracker.util.TrackingUtility
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
@@ -21,6 +23,8 @@ class MainActivity : AppCompatActivity() {
         if(!this::navController.isInitialized) {
             navController = this.findNavController(R.id.nav_host_fragment)
         }
+        //Calls if activity destroyed
+        navigateToTrackingFragmentIfNeeded(intent)
       //  NavigationUI.setupActionBarWithNavController(this, navController)
         setSupportActionBar(toolbar)
         bottomNavigationView.setupWithNavController(navController)
@@ -32,6 +36,18 @@ class MainActivity : AppCompatActivity() {
             }
         }
         //NavigationUI.setupWithNavController(bottomNavigationView,  navController)
+    }
+
+    //Calls if activity isn't destroyed
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        navigateToTrackingFragmentIfNeeded(intent)
+    }
+
+    private fun navigateToTrackingFragmentIfNeeded(intent: Intent?) {
+        if(intent?.action == ACTION_SHOW_TRACKING_FRAGMENT) {
+            navController.navigate(R.id.action_globaltracking_fragment)
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

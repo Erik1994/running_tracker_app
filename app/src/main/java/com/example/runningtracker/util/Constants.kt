@@ -3,4 +3,12 @@ package com.example.runningtracker.util
 object Constants {
     const val RUNNING_DB_NAME = "running_db"
     const val LOCATION_PERMISSION_REQUEST_CODE = 101;
+    const val ACTION_START_RESUME_LOCATION_TRACKING = "ACTION_START_RESUME_LOCATION_TRACKING"
+    const val ACTION_PAUSE_TRACKING = "ACTION_PAUSE_TRACKING"
+    const val ACTION_STOP_LOCATION_TRACKING = "ACTION_STOP_LOCATION_TRACKING"
+    const val ACTION_SHOW_TRACKING_FRAGMENT = "ACTION_SHOW_TRACKING_FRAGMENT"
+
+    const val NOTIFICATION_CHANNEL_ID = "tracking_channel"
+    const val NOTIFICATION_CHANEL_NAME = "Tracking"
+    const val NOTIFICATION_ID = 1
 }
