@@ -6,10 +6,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.runningtracker.R
 import com.example.runningtracker.util.Constants
 import com.example.runningtracker.util.TrackingUtility
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_run.*
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 
@@ -20,6 +22,10 @@ class RunFragment : Fragment(R.layout.fragment_run), EasyPermissions.PermissionC
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         requestPermissions()
+        fab.setOnClickListener {
+            findNavController().navigate(R.id.action_runFragment_to_trackingFragment)
+        }
+
     }
 
     private fun requestPermissions() {
