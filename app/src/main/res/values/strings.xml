@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Running tracker</string>
     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyAJS6ahJgk_m4lAu_OYsmwZbYgwL2b-93o</string>
+    <string name="your_runs">Your runs</string>
+    <string name="statistics">Statistics</string>
+    <string name="settings">Settings</string>
     <string-array name="filter_options">
         <item>Date</item>
         <item>Running Time</item>
