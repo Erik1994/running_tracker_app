@@ -15,8 +15,11 @@ import com.example.runningtracker.util.Constants.ACTION_START_RESUME_LOCATION_TR
 import com.example.runningtracker.util.Constants.MAP_ZOOM
 import com.example.runningtracker.util.Constants.POLYLINE_COLOR
 import com.example.runningtracker.util.Constants.POLYLINE_WIDTH
+import com.example.runningtracker.util.TrackingUtility
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_tracking.*
@@ -28,6 +31,7 @@ class TrackingFragment: Fragment(R.layout.fragment_tracking) {
 
     private var isTracking = false
     private var pathPoints = mutableListOf<Polyline>()
+    private var currentTimeInMillis = 0L
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -71,8 +75,8 @@ class TrackingFragment: Fragment(R.layout.fragment_tracking) {
             map?.animateCamera(
                 CameraUpdateFactory.newLatLngZoom(
                     pathPoints.last().last(),
-                    MAP_ZOOM)
-            )
+                    MAP_ZOOM
+                ))
         }
     }
 
@@ -92,6 +96,12 @@ class TrackingFragment: Fragment(R.layout.fragment_tracking) {
             pathPoints = it
             addLatestPolyLine()
             moveCameraToUser()
+        }
+
+        TrackingService.timeRunInMillis.observe(viewLifecycleOwner) {
+            currentTimeInMillis = it
+            val formattedTime = TrackingUtility.getFormattedStopWatchTime(currentTimeInMillis, true)
+            tvTimer.text = formattedTime
         }
     }
 
