@@ -2,9 +2,13 @@ package com.example.runningtracker.ui.tracking
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.runningtracker.R
 import com.example.runningtracker.services.Polyline
 import com.example.runningtracker.services.TrackingService
@@ -12,6 +16,7 @@ import com.example.runningtracker.ui.run.RunViewModel
 import com.example.runningtracker.util.Constants
 import com.example.runningtracker.util.Constants.ACTION_PAUSE_TRACKING
 import com.example.runningtracker.util.Constants.ACTION_START_RESUME_LOCATION_TRACKING
+import com.example.runningtracker.util.Constants.ACTION_STOP_LOCATION_TRACKING
 import com.example.runningtracker.util.Constants.MAP_ZOOM
 import com.example.runningtracker.util.Constants.POLYLINE_COLOR
 import com.example.runningtracker.util.Constants.POLYLINE_WIDTH
@@ -21,6 +26,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_tracking.*
 
@@ -28,6 +34,7 @@ import kotlinx.android.synthetic.main.fragment_tracking.*
 class TrackingFragment: Fragment(R.layout.fragment_tracking) {
     private val viewModel: TrackingViewModel by viewModels()
     private var map: GoogleMap? = null
+    private lateinit var menu: Menu
 
     private var isTracking = false
     private var pathPoints = mutableListOf<Polyline>()
@@ -35,6 +42,7 @@ class TrackingFragment: Fragment(R.layout.fragment_tracking) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
         mapView.onCreate(savedInstanceState)
         initMap()
         setClickListeners()
@@ -82,6 +90,7 @@ class TrackingFragment: Fragment(R.layout.fragment_tracking) {
 
     private fun toggleRun() {
         if(isTracking) {
+            menu?.getItem(0)?.isVisible = true
             sendCommandsToService(ACTION_PAUSE_TRACKING)
         } else {
             sendCommandsToService(ACTION_START_RESUME_LOCATION_TRACKING)
@@ -111,6 +120,7 @@ class TrackingFragment: Fragment(R.layout.fragment_tracking) {
             btnToggleRun.text = getString(R.string.start)
             btnFinishRun.visibility = View.VISIBLE
         } else {
+            menu?.getItem(0)?.isVisible = true
             btnToggleRun.text = getString(R.string.stop)
             btnFinishRun.visibility = View.GONE
         }
@@ -129,6 +139,43 @@ class TrackingFragment: Fragment(R.layout.fragment_tracking) {
             map = it
             addAllPolyLines()
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.toolbar_tracking_menu, menu)
+        this.menu = menu
+        if(currentTimeInMillis > 0L) {
+            menu.findItem(R.menu.toolbar_tracking_menu).isVisible = true
+        }
+
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.miCancelTracking -> showCancelTrackingDialog()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun showCancelTrackingDialog() {
+        val dialog = MaterialAlertDialogBuilder(requireContext(), R.style.AlertDialogTheme)
+            .setTitle("Cancel the run")
+            .setMessage("Do you want to cancel run?")
+            .setIcon(R.drawable.ic_delete)
+            .setPositiveButton("Yes") { _, _ ->
+                stopRun()
+            }
+            .setNegativeButton("No") { dialogInterface, _ ->
+                dialogInterface.cancel()
+            }
+            .create()
+        dialog.show()
+    }
+
+    private fun stopRun() {
+        sendCommandsToService(ACTION_STOP_LOCATION_TRACKING)
+        findNavController().navigate(R.id.action_trackingFragment_to_runFragment)
     }
 
     override fun onResume() {
