@@ -4,5 +4,5 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import com.example.runningtracker.datarepository.DataRepository
 
-class SetupViewModel @ViewModelInject constructor(dataRepository: DataRepository): ViewModel() {
+class SetupViewModel @ViewModelInject constructor(val dataRepository: DataRepository): ViewModel() {
 }
