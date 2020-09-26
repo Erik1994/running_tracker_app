@@ -28,6 +28,8 @@ class MainActivity : AppCompatActivity() {
       //  NavigationUI.setupActionBarWithNavController(this, navController)
         setSupportActionBar(toolbar)
         bottomNavigationView.setupWithNavController(navController)
+        // when click to open already opened fragment it doesn't reopen
+        bottomNavigationView.setOnNavigationItemReselectedListener { /* Nothing do */ }
 
         navController.addOnDestinationChangedListener{ _, destination, _ ->
             when(destination.id) {
