@@ -7,7 +7,7 @@ import com.example.runningtracker.datarepository.DataRepository
 import com.example.runningtracker.db.Run
 import com.example.runningtracker.enums.SortTypes
 
-class RunViewModel @ViewModelInject constructor(val dataRepository: DataRepository): ViewModel() {
+class RunViewModel @ViewModelInject constructor(private val dataRepository: DataRepository): ViewModel() {
     private val runSortedByDate = dataRepository.getAllRunsSortedByDates()
     private val runsSortedByDistance = dataRepository.getAllRunsSortedByDistance()
     private val runsSortedByCalories = dataRepository.getAllRunsSortedByCalories()

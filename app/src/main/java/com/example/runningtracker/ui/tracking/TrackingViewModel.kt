@@ -7,7 +7,7 @@ import com.example.runningtracker.datarepository.DataRepository
 import com.example.runningtracker.db.Run
 import kotlinx.coroutines.launch
 
-class TrackingViewModel @ViewModelInject constructor(val dataRepository: DataRepository): ViewModel() {
+class TrackingViewModel @ViewModelInject constructor(private val dataRepository: DataRepository): ViewModel() {
 
     fun insertRun(run: Run) = viewModelScope.launch {
         dataRepository.insertRun(run)
