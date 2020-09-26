@@ -6,4 +6,7 @@ import com.example.runningtracker.datarepository.DataRepository
 
 class RunViewModel @ViewModelInject constructor(val dataRepository: DataRepository): ViewModel() {
 
+
+    fun getRunSortedByDate() = dataRepository.getAllRunsSortedByDates()
+
 }

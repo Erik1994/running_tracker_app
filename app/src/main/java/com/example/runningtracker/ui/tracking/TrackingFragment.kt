@@ -114,6 +114,7 @@ class TrackingFragment: Fragment(R.layout.fragment_tracking) {
                 bounds.build(),
                 mapView.width,
                 mapView.height,
+                // padding
                 (mapView.height * 0.05f).toInt()
             )
         )
